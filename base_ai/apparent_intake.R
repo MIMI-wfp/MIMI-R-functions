@@ -73,13 +73,6 @@ apparent_intake <- function(name_of_survey, path_to_file = here::here("processed
   # If NLSS survey then need to read in zone to do fct matches for milk by zone:
   if (name_of_survey == "nga_lss1819"){
     
-    # Read in zone data - NB: only required for Nigeria
-    cover <-  read.csv("nlss_raw/secta_cover.csv")
-    
-    # Left join zone to hh_info:
-    hh_info <- hh_info %>% 
-      dplyr::left_join(cover %>% dplyr::select(hhid, zone), by = "hhid")
-    
     # Filter fc_table for milk:
     milk_fct <- fc_table %>% 
       filter(item_code == 110) %>% 
@@ -92,12 +85,12 @@ apparent_intake <- function(name_of_survey, path_to_file = here::here("processed
                 by = "hhid") %>%
       left_join(milk_fct, 
                 by = c("item_code", "zone")) %>% # Join milk food composition table by item_code and zone
-      mutate(across(-c(item_code, hhid, item_name, food_group, quantity_100g, 
+      mutate(across(-c(item_code, hhid, item_name, quantity_100g, 
                        quantity_g, zone),
                     ~.x*quantity_100g)) %>% # Multiply nutrient values by quantity consumed
       group_by(hhid) %>% # Aggregate by household id summing the values of consumption
       summarise(across(-c(item_code, item_name, quantity_100g, quantity_g, 
-                          food_group, zone),
+                          zone),
                        ~sum(., na.rm = T))) %>% 
       left_join(hh_info %>% select(hhid, afe), by = "hhid") %>% # Join afe
       mutate(across(-c(hhid, afe),~.x/afe)) %>% # Divide all nutrient values by afe
@@ -114,13 +107,13 @@ apparent_intake <- function(name_of_survey, path_to_file = here::here("processed
       left_join(fc_table, by = "item_code") %>% 
       mutate(
         across(
-          -c(item_code, hhid,item_name ,food_group, quantity_100g, quantity_g),
+          -c(item_code, hhid,item_name, quantity_100g, quantity_g),
           ~.x*quantity_100g
         )
       ) %>% 
       group_by(hhid) %>% 
       summarise(
-        across(-c(item_code,item_name,quantity_100g,quantity_g, food_group),
+        across(-c(item_code,item_name,quantity_100g,quantity_g),
                ~sum(.,na.rm = T))
       ) %>% 
       left_join(hh_info %>% select(hhid, afe), by = "hhid") %>% 
@@ -137,7 +130,7 @@ apparent_intake <- function(name_of_survey, path_to_file = here::here("processed
       group_by(hhid) %>%
       summarise(across(everything(), ~sum(., na.rm = T))) %>%
       ungroup() %>% 
-      dplyr::select(-afe) 
+      dplyr::select(-c(edible_portion, afe))
     
     base_ai
   }
@@ -147,13 +140,13 @@ apparent_intake <- function(name_of_survey, path_to_file = here::here("processed
       left_join(fc_table, by = "item_code") %>% 
       mutate(
         across(
-          -c(item_code, hhid,item_name ,food_group, quantity_100g, quantity_g),
+          -c(item_code, hhid,item_name, quantity_100g, quantity_g),
           ~.x*quantity_100g
         )
       ) %>% 
       group_by(hhid) %>% 
       summarise(
-        across(-c(item_code,item_name,quantity_100g,quantity_g, food_group),
+        across(-c(item_code,item_name,quantity_100g,quantity_g),
                ~sum(.,na.rm = T))
       ) %>% 
       left_join(hh_info %>% select(hhid, afe), by = "hhid") %>% 
@@ -164,7 +157,7 @@ apparent_intake <- function(name_of_survey, path_to_file = here::here("processed
         )
       ) %>% 
       ungroup() %>% 
-      select(-afe)
+      select(-c(zone, edible_portion, afe))
     x
   }
 }
