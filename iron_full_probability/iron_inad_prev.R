@@ -253,6 +253,6 @@ fe_full_prob <- function(data, group1 = NULL, group2 = NULL, bio_avail = 10, hh_
 
 
 ### Use case for Senegal
-sen_fe_inadequacy_adm1 <- fe_full_prob(sen_base_ai_fe, group1 = adm1, bio_avail = 10, hh_weight = "hh_weight")
+# sen_fe_inadequacy_adm1 <- fe_full_prob(sen_base_ai_fe, group1 = adm1, bio_avail = 10, hh_weight = "hh_weight")
 
-sen_fe_inadequacy_adm2 <- fe_full_prob(sen_base_ai_fe, group1 = adm2, bio_avail = 10, hh_weight = "hh_weight")
+# sen_fe_inadequacy_adm2 <- fe_full_prob(sen_base_ai_fe, group1 = adm2, bio_avail = 10, hh_weight = "hh_weight")
