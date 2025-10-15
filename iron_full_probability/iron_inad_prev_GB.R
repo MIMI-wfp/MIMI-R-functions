@@ -69,7 +69,11 @@ fe_full_prob <- function(data, group1 = NULL, group2 = NULL, bio_avail = 10, hh_
     )
   
   # Handle grouping
-  grouping_vars <- c(group1, group2)
+  grouping_vars <- c(
+  if (!is.null(group1)) rlang::as_name(rlang::ensym(group1)) else NULL,
+  if (!is.null(group2)) rlang::as_name(rlang::ensym(group2)) else NULL
+)
+
   
   if (length(grouping_vars) == 0 || all(sapply(grouping_vars, is.null))) {
     result <- survey_design %>%
