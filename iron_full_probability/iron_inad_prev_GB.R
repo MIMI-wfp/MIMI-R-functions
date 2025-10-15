@@ -94,15 +94,15 @@ fe_full_prob <- function(data, group1 = NULL, group2 = NULL, bio_avail = 10, hh_
 
 
 
-# Use function (sen_base_ai_fe df has hhid, adm1, adm2, survey_wgt, fe_mg ai)
-sen_fe_inadequacy_adm1 <- fe_full_prob(
-  all_intake,
-  group1 = "adm1",
-  bio_avail = 10,
-  hh_weight = "survey_wgt" ,
-  strata = "res",
-  psu = "ea"
-)
+# # Use function (sen_base_ai_fe df has hhid, adm1, adm2, survey_wgt, fe_mg ai)
+# sen_fe_inadequacy_adm1 <- fe_full_prob(
+#   all_intake,
+#   group1 = "adm1",
+#   bio_avail = 10,
+#   hh_weight = "survey_wgt" ,
+#   strata = "res",
+#   psu = "ea"
+# )
 
-print(sen_fe_inadequacy_adm1)
+# print(sen_fe_inadequacy_adm1)
 
